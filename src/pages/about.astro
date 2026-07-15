@@ -1,0 +1,73 @@
+---
+import { HeroSection } from "../components/HeroSection/HeroSection";
+import NameTag from "../components/NameTag.tsx/NameTag.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="About"
+  description="A little about Matthew Ritter — software engineer, builder, and dad."
+>
+  <HeroSection>
+    <div class="wrapper">
+      <div class="about-image-section">
+        <img src="/src/assets/beach.jpg" />
+      </div>
+      <div class="name-tag">
+        <NameTag />
+      </div>
+    </div>
+    <p>
+      Im I software engineer by trade, and I love building things. When Im not
+      working Im hanging out with my family going to museums, parks, or hiking.
+      I take every chance I can to explore the world through my kids eyes.
+    </p>
+  </HeroSection>
+</Layout>
+
+<style>
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .about-image-section {
+    position: relative;
+    display: flex;
+    justify-self: center;
+    border: 10px solid var(--secondary-color);
+    border-radius: 20px;
+    height: 400px;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+  }
+
+  .name-tag {
+    position: absolute;
+    inset: 0;
+    top: unset;
+    bottom: 0;
+    left: 50%;
+    transform: translateY(50%) translateX(-50%);
+    width: min-content;
+    height: min-content;
+
+    @media (min-width: 768px) {
+      top: 0;
+      bottom: unset;
+      transform: translateY(-50%) translateX(-50%);
+    }
+  }
+
+  p {
+    margin-top: 40px;
+    font-size: 20px;
+  }
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+  }
+</style>

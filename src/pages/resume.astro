@@ -1,0 +1,60 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import ResumeSection from "../components/ResumeSection/ResumeSection.astro";
+
+const sections = (await getCollection("resume")).sort(
+  (a, b) => b.data.startDate - a.data.startDate,
+);
+---
+
+<Layout
+  title="Resume"
+  description="Matthew Ritter's resume — over a decade of software engineering experience."
+>
+  <div id="resume">
+    <div>
+      <h1>Matthew Ritter</h1>
+      <p class="subtext">matthew.william.ritter@gmail.com</p>
+    </div>
+    <p class="subtext">
+      I’ve been engineering software for over a decade. Specializing in
+      fullstack technologies and frameworks like React, Typescript, Next.js,
+      Node and Go. I enjoy working on challenging problems and leveraging
+      software to solve those problems.
+    </p>
+    <div class="resume-sections">
+      {sections.map((section) => <ResumeSection section={section} />)}
+    </div>
+    <div>
+      <h3>Education</h3>
+      <p class="subtext">
+        Valdosta State University, Valdosta, Ga – BS in Computer Information
+        Systems
+      </p>
+    </div>
+    <div>
+      <h3>Specialities</h3>
+      <p class="subtext">
+        Next.js, React, Astro, Node, JavaScript, Typescript, HTML, CSS, SCSS,
+        Tailwind, Go, PHP, GraphQL, Sanity, Postgres, SQL
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  #resume {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .subtext {
+    font-size: smaller;
+  }
+  .resume-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+</style>

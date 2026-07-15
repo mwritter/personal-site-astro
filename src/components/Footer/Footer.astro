@@ -1,0 +1,60 @@
+<div class="footer">
+  <nav>
+    <ul>
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li><a href="/about">About</a></li>
+      <li>
+        <a href="/blog">Blog</a>
+      </li>
+      <li>
+        <a href="/resume">Resume</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="social">
+    <a
+      href="https://www.github.com/mwritter"
+      target="_blank"
+      referrerpolicy="no-referrer"><img src="/github.svg" height="25" /></a
+    >
+    <a
+      href="https://www.linkedin.com/in/mwritter"
+      target="_blank"
+      referrerpolicy="no-referrer"
+    >
+      <img src="/linkedIn.svg" height="25" /></a
+    >
+  </div>
+</div>
+
+<style>
+  .footer {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 2rem;
+
+    @media print {
+      display: none !important;
+    }
+  }
+  nav {
+    flex: 1;
+  }
+  ul {
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+    font-size: smaller;
+  }
+  .social {
+    display: flex;
+    gap: 1rem;
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+const { src } = Astro.props;
+---
+
+<div class="border-image">
+  <div class="image-wrapper">
+    <img src={src} />
+  </div>
+</div>
+
+<style>
+  .border-image {
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    width: 100%;
+    max-width: 375px;
+    height: 375px;
+    border-radius: 20px;
+    background-color: var(--secondary-color);
+    padding: 1rem;
+  }
+
+  .border-image .image-wrapper {
+    height: 280px;
+    width: 100%;
+    background-color: var(--primary-color);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  img {
+    width: 100%;
+  }
+</style>

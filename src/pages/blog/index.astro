@@ -1,0 +1,43 @@
+---
+import { HeroSection } from "../../components/HeroSection/HeroSection";
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { formatDate } from "../../utils/formatData";
+import BlogSummary from "../../components/BlogSummary/BlogSummary.astro";
+
+const posts = await getCollection("blog");
+---
+
+<Layout
+  title="Blog"
+  description="Writing on software engineering, Astro, React, and whatever I'm building."
+>
+  <h1>Blog</h1>
+  <div>
+    <ul>
+      {
+        posts.map((post) => (
+          <li>
+            <BlogSummary post={post} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Layout>
+
+<style>
+  ul {
+    width: 100%;
+    display: grid;
+    gap: 1rem;
+  }
+  p {
+    margin: 0;
+  }
+
+  time {
+    font-size: smaller;
+    justify-self: end;
+  }
+</style>

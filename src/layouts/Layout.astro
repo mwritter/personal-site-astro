@@ -1,23 +1,101 @@
+---
+import { Font } from "astro:assets";
+import "../styles/index.css";
+import { ClientRouter } from "astro:transitions";
+import { PageNav } from "../components/PageNav/PageNav";
+import Footer from "../components/Footer/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const SITE_TITLE = "mwritter";
+const {
+  title,
+  description = "Matthew Ritter — software engineer. Portfolio and blog.",
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
+const canonicalURL = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site)
+  : undefined;
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {canonicalURL && <link rel="canonical" href={canonicalURL} />}
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonicalURL && <meta property="og:url" content={canonicalURL} />}
+    <meta name="twitter:card" content="summary" />
+    <Font cssVariable="--font-fira-mono" preload />
+    <Font cssVariable="--font-inter" />
+    <Font cssVariable="--font-caveat" />
+    <ClientRouter />
+  </head>
+  <body>
+    <PageNav
+      client:load
+      transition:persist="page-nav"
+      pathname={Astro.url.pathname}
+    />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-color);
+    font-family: var(--font-fira-mono);
+  }
+  #main-content {
+    flex: 1;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: normal;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 </style>
