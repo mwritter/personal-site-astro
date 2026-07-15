@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import { HeroSection } from "../components/HeroSection/HeroSection";
 import NameTag from "../components/NameTag.tsx/NameTag.astro";
 import Layout from "../layouts/Layout.astro";
+import beachImage from "../assets/beach.jpg";
 ---
 
 <Layout
@@ -11,7 +13,7 @@ import Layout from "../layouts/Layout.astro";
   <HeroSection>
     <div class="wrapper">
       <div class="about-image-section">
-        <img src="/src/assets/beach.jpg" />
+        <Image src={beachImage} alt="" />
       </div>
       <div class="name-tag">
         <NameTag />
@@ -53,12 +55,6 @@ import Layout from "../layouts/Layout.astro";
     transform: translateY(50%) translateX(-50%);
     width: min-content;
     height: min-content;
-
-    @media (min-width: 768px) {
-      top: 0;
-      bottom: unset;
-      transform: translateY(-50%) translateX(-50%);
-    }
   }
 
   p {
@@ -66,8 +62,8 @@ import Layout from "../layouts/Layout.astro";
     font-size: 20px;
   }
   img {
-    position: absolute;
-    inset: 0;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>

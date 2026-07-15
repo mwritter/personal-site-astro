@@ -1,10 +1,12 @@
 ---
+import { Image } from "astro:assets";
+
 const { src } = Astro.props;
 ---
 
 <div class="border-image">
   <div class="image-wrapper">
-    <img src={src} />
+    <Image class="img" src={src} alt="" />
   </div>
 </div>
 
@@ -29,7 +31,9 @@ const { src } = Astro.props;
     overflow: hidden;
   }
 
-  img {
+  .img {
     width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 </style>

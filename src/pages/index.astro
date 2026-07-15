@@ -3,6 +3,7 @@ import { HeroSection } from "../components/HeroSection/HeroSection";
 import BorderImage from "../components/BorderImage/BorderImage.astro";
 import Layout from "../layouts/Layout.astro";
 import RecentBlogPost from "../components/RecentBlogPosts/RecentBlogPosts.astro";
+import meImage from "../assets/me.jpg";
 ---
 
 <Layout>
@@ -12,7 +13,7 @@ import RecentBlogPost from "../components/RecentBlogPosts/RecentBlogPosts.astro"
         Hey I’m Matthew, I’ve been engineering software for over a decade and I
         love building things. Welcome to my little corner of the internet.
       </p>
-      <BorderImage src="/src/assets/me.jpg" />
+      <BorderImage src={meImage} />
     </HeroSection>
     <div id="recent-blog-section">
       <RecentBlogPost />
