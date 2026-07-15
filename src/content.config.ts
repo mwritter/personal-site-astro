@@ -1,5 +1,5 @@
 // 1. Import utilities from `astro:content`
-import { defineCollection } from "astro:content";
+import { defineCollection, type CollectionEntry } from "astro:content";
 
 // 2. Import loader(s)
 import { glob } from "astro/loaders";
@@ -13,7 +13,7 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    pubDate: z.coerce.date(),
+    pubDate: z.coerce.date().optional(),
     updatedDate: z.coerce.date().optional(),
   }),
 });
@@ -30,3 +30,6 @@ const resume = defineCollection({
 
 // 5. Export a single `collections` object to register your collection(s)
 export const collections = { blog, resume };
+
+export const publishedPostFilter = (post: CollectionEntry<"blog">) =>
+  Boolean(post.data.pubDate);

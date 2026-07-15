@@ -1,23 +1,28 @@
 ---
 import { getCollection } from "astro:content";
 import BlogSummary from "../BlogSummary/BlogSummary.astro";
+import { publishedPostFilter } from "../../content.config";
 
-const posts = (await getCollection("blog"))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const posts = (await getCollection("blog", publishedPostFilter))
+  .sort((a, b) => b.data.pubDate!.valueOf() - a.data.pubDate!.valueOf())
   .slice(0, 3);
 ---
 
 <section>
-  <h2>Recent Blog Posts</h2>
-  <ul>
-    {
-      posts.map((post) => (
-        <li>
-          <BlogSummary post={post} />
-        </li>
-      ))
-    }
-  </ul>
+  {
+    posts.length > 0 ? (
+      <>
+        <h2>Recent Blog Posts</h2>
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <BlogSummary post={post} />
+            </li>
+          ))}
+        </ul>
+      </>
+    ) : null
+  }
 </section>
 
 <style>

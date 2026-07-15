@@ -2,7 +2,7 @@
 import { Font } from "astro:assets";
 import "../styles/index.css";
 import { ClientRouter } from "astro:transitions";
-import { PageNav } from "../components/PageNav/PageNav";
+import PageNav from "../components/PageNav/PageNav.astro";
 import Footer from "../components/Footer/Footer.astro";
 
 interface Props {
@@ -47,11 +47,7 @@ const canonicalURL = Astro.site
     <ClientRouter />
   </head>
   <body>
-    <PageNav
-      client:load
-      transition:persist="page-nav"
-      pathname={Astro.url.pathname}
-    />
+    <PageNav />
     <main id="main-content">
       <slot />
     </main>

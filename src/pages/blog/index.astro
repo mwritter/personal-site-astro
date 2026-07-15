@@ -1,11 +1,10 @@
 ---
-import { HeroSection } from "../../components/HeroSection/HeroSection";
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
-import { formatDate } from "../../utils/formatData";
 import BlogSummary from "../../components/BlogSummary/BlogSummary.astro";
+import { publishedPostFilter } from "../../content.config";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("blog", publishedPostFilter);
 ---
 
 <Layout
@@ -13,16 +12,22 @@ const posts = await getCollection("blog");
   description="Writing on software engineering, Astro, React, and whatever I'm building."
 >
   <h1>Blog</h1>
-  <div>
-    <ul>
-      {
-        posts.map((post) => (
-          <li>
-            <BlogSummary post={post} />
-          </li>
-        ))
-      }
-    </ul>
+  <div class="blog-section">
+    {
+      posts.length > 0 ? (
+        <ul>
+          {posts.map((post) => (
+            <li>
+              <BlogSummary post={post} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div id="empty-blog">
+          <p>No posts yet</p>
+        </div>
+      )
+    }
   </div>
 </Layout>
 
@@ -35,9 +40,25 @@ const posts = await getCollection("blog");
   p {
     margin: 0;
   }
+  ul {
+    align-self: start;
+  }
 
   time {
     font-size: smaller;
     justify-self: end;
+  }
+  .blog-section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #empty-blog {
+    width: 100%;
+    height: 90%;
+    display: grid;
+    place-content: center;
   }
 </style>

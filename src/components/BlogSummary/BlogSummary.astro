@@ -7,17 +7,20 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const { title, description, pubDate } = post.data;
 ---
 
 <div class="blog-summary">
   <a href={`/blog/${post.id}`}>
     <div class="content">
-      <h3>{post.data.title}</h3>
+      <h3>{title}</h3>
       <div class="description">
-        <p>{post.data.description}</p>
-        <time datetime={post.data.pubDate.toISOString()}>
-          {formatDate(post.data.pubDate)}
-        </time>
+        <p>{description}</p>
+        {
+          pubDate && (
+            <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+          )
+        }
       </div>
     </div>
   </a>

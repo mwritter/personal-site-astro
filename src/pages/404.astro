@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const url = Astro.url;
+---
+
+<Layout>
+  <div id="not-found">
+    <p>404 | page not found</p>
+    <p class="path">path: {url.pathname}</p>
+  </div>
+</Layout>
+
+<style>
+  #not-found {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-content: center;
+    gap: 2rem;
+  }
+  p:first-of-type {
+    text-align: center;
+    font-size: 1.5em;
+  }
+  p.path {
+    background-color: var(--secondary-color);
+    padding: 1rem;
+    border-radius: 10;
+    color: white;
+  }
+</style>
