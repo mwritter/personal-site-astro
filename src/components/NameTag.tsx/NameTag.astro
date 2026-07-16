@@ -1,10 +1,18 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
 <div class="name-tag">
   <div class="label">
     <p class="hello">HELLO</p>
     <p>MY NAME IS</p>
   </div>
   <div class="name">
-    <p>Matthew</p>
+    <p>{name}</p>
   </div>
 </div>
 

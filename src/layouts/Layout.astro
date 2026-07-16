@@ -1,9 +1,9 @@
 ---
 import { Font } from "astro:assets";
-import "../styles/index.css";
 import { ClientRouter } from "astro:transitions";
 import PageNav from "../components/PageNav/PageNav.astro";
 import Footer from "../components/Footer/Footer.astro";
+import "../styles/index.css";
 
 interface Props {
   title?: string;
@@ -54,47 +54,3 @@ const canonicalURL = Astro.site
     <Footer />
   </body>
 </html>
-
-<style is:global>
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-  html,
-  body {
-    width: 100%;
-    height: 100%;
-  }
-
-  body {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--primary-color);
-    font-family: var(--font-fira-mono);
-  }
-  #main-content {
-    flex: 1;
-    max-width: 1000px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: normal;
-  }
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-</style>

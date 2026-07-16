@@ -2,3 +2,45 @@
     --primary-color: #8AA7BD;
     --secondary-color: #2C4E6E;
 }
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-color);
+    font-family: var(--font-fira-mono);
+  }
+  #main-content {
+    flex: 1;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: normal;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
