@@ -1,5 +1,5 @@
 ---
-title: Seniro Software Engineer
+title: Senior Software Engineer
 company: NearForm
 startDate: 2024
 endDate: 2025

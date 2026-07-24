@@ -13,9 +13,11 @@ const { title, company, startDate, endDate, description, link } = section.data;
 let dates = "";
 if (startDate) {
   dates += startDate;
-}
-if (endDate) {
-  dates = `${dates} - ${endDate}`;
+  if (endDate) {
+    dates = `${dates} - ${endDate}`;
+  } else {
+    dates = `${dates} - Present`;
+  }
 }
 ---
 

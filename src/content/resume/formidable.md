@@ -17,7 +17,7 @@ Became a technical resource for Sanity CMS architecture, helping teams structure
 Worked directly with clients and stakeholders to understand business requirements, investigate technical problems, and deliver effective solutions.
 
 
-Contributed to large-scale projects including Puma's global digital platform, helping support a multi-market web experience built for international scale.
+Worked on Puma's global digital platform, contributing to a multi-market web experience built to support international scale.
 
 
 Mentored engineers through pairing, code reviews, technical guidance, and collaborative problem-solving.
