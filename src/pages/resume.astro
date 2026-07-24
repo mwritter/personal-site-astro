@@ -3,9 +3,12 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import ResumeSection from "../components/ResumeSection/ResumeSection.astro";
 
-const sections = (await getCollection("resume")).sort(
-  (a, b) => b.data.startDate - a.data.startDate,
-);
+const sections = (await getCollection("resume")).sort((a, b) => {
+  if (a.data.startDate && b.data.startDate) {
+    return b.data.startDate - a.data.startDate;
+  }
+  return 1;
+});
 ---
 
 <Layout
@@ -15,31 +18,80 @@ const sections = (await getCollection("resume")).sort(
   <div id="resume">
     <div>
       <h1>Matthew Ritter</h1>
+      <p class="subtext">Senior Software Engineer</p>
       <p class="subtext">matthew.william.ritter@gmail.com</p>
     </div>
-    <p class="subtext">
-      I’ve been engineering software for over a decade. Specializing in
-      fullstack technologies and frameworks like React, Typescript, Next.js,
-      Node and Go. I enjoy working on challenging problems and leveraging
-      software to solve those problems.
-    </p>
-    <div class="resume-sections">
-      {sections.map((section) => <ResumeSection section={section} />)}
-    </div>
     <div>
-      <h3>Education</h3>
+      <p class="subtext">
+        TypeScript · React · Next.js · Node.js · Go · APIs · System Design ·
+        Developer Tooling
+      </p>
+    </div>
+    <section>
+      <h2>Summary</h2>
+      <p class="subtext">
+        Senior Software Engineer with 10+ years of experience designing and
+        building production software across the stack. Deep expertise in
+        TypeScript, React, and modern web architecture, with a track record of
+        leading complex frontend and full-stack initiatives from technical
+        investigation through implementation and delivery.
+      </p>
+      <p class="subtext">
+        Experienced in modernizing legacy applications, designing reusable
+        platforms and component systems, building developer tooling, and
+        integrating AI capabilities into developer workflows. Comfortable owning
+        ambiguous technical problems, making architectural decisions,
+        collaborating directly with product and design teams, and mentoring
+        engineers.
+      </p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div class="resume-sections">
+        {sections.map((section) => <ResumeSection section={section} />)}
+      </div>
+    </section>
+    <section>
+      <h2>Education</h2>
       <p class="subtext">
         Valdosta State University, Valdosta, Ga – BS in Computer Information
         Systems
       </p>
-    </div>
-    <div>
-      <h3>Specialities</h3>
-      <p class="subtext">
-        Next.js, React, Astro, Node, JavaScript, Typescript, HTML, CSS, SCSS,
-        Tailwind, Go, PHP, GraphQL, Sanity, Postgres, SQL
-      </p>
-    </div>
+    </section>
+    <section>
+      <h2>Technical Skills</h2>
+      <div class="note-list">
+        <p>Languages</p>
+        <p>TypeScript · JavaScript · Go</p>
+      </div>
+      <div class="note-list">
+        <p>Frontend & Product Engineering</p>
+        <p>
+          React · Next.js · Astro · Vite · Storybook · HTML · CSS · SCSS ·
+          Tailwind CSS
+        </p>
+      </div>
+      <div class="note-list">
+        <p>Backend & APIs</p>
+        <p>Node.js · Express · GraphQL · REST APIs · API Design · SQLite</p>
+      </div>
+      <div class="note-list">
+        <p>Engineering & Infrastructure</p>
+        <p>
+          GitHub Actions · CI/CD · Automated Testing · Playwright · Jest · React
+          Testing Library · System Design · Component Libraries · Developer
+          Tooling
+        </p>
+      </div>
+      <div class="note-list">
+        <p>AI & Developer Platforms</p>
+        <p>
+          Model Context Protocol (MCP) · AI Agent Integrations · CLI Development
+          · Developer Experience
+        </p>
+      </div>
+    </section>
   </div>
 </Layout>
 
@@ -48,6 +100,22 @@ const sections = (await getCollection("resume")).sort(
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  section {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .note-list {
+    display: grid;
+    gap: 0.2rem;
+    padding-top: 0.5rem;
+    font-size: smaller;
+
+    > p:first-of-type {
+      font-weight: 800;
+    }
   }
   .subtext {
     font-size: smaller;
@@ -56,5 +124,9 @@ const sections = (await getCollection("resume")).sort(
     display: flex;
     flex-direction: column;
     gap: 2rem;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
   }
 </style>

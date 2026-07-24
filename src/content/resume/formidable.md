@@ -5,12 +5,22 @@ startDate: 2022
 endDate: 2024
 ---
 
-Integrate with new teams and technologies quickly to deliver on client projects and improve on team processes when possible.
+Delivered software for enterprise clients across multiple industries, rapidly adapting to new domains, teams, and technical environments.
 
-Mentor others to accelerate their career-growth and encourage their participation.
 
-Communicate directly with clients and stakeholders.
+Worked extensively with React, Next.js, TypeScript, Sanity, and GraphQL to build and evolve production web applications.
 
-Utilize knowledge of advanced web patterns, scaling, state management and performance to design and implement effective and efficient solutions.
 
-Work with testing frameworks like jest, react-testing-library and puppeteer to insure code integrity.
+Became a technical resource for Sanity CMS architecture, helping teams structure content models and integrate Sanity effectively into their applications.
+
+
+Worked directly with clients and stakeholders to understand business requirements, investigate technical problems, and deliver effective solutions.
+
+
+Contributed to large-scale projects including Puma's global digital platform, helping support a multi-market web experience built for international scale.
+
+
+Mentored engineers through pairing, code reviews, technical guidance, and collaborative problem-solving.
+
+
+Designed and implemented solutions involving advanced frontend architecture, state management, performance optimization, and automated testing.

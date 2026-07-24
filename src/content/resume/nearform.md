@@ -5,10 +5,22 @@ startDate: 2024
 endDate: 2025
 ---
 
-Break down large bodies of work into smaller pieces for the team to work on.
+Served as the lead frontend engineer and sole frontend developer for a major modernization of Nintendo's Parental Controls web experience.
 
-Take the lead on specific features, from investigation to implementation.
 
-Build component libraries to be used at scale.
+Architected and rebuilt the shared component library used by major user-facing applications.
 
-Setup CICD to automate workflows related to testing, and deploying.
+
+Led the migration of the component library from Create React App to Vite and introduced Storybook for component development, documentation, and testing.
+
+
+Replaced CircleCI with GitHub Actions to automate testing, builds, and publishing the component library as a private npm package.
+
+
+Migrated a legacy Create React App and Express application to Next.js, using API routes and middleware to modernize the application architecture.
+
+
+Took ownership of the frontend technical direction for the project, proactively identifying and executing architectural improvements beyond the original redesign requirements.
+
+
+Worked directly with client stakeholders and engineering teams to define technical solutions and deliver the modernization end-to-end.

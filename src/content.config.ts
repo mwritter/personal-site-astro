@@ -23,8 +23,11 @@ const resume = defineCollection({
   schema: z.object({
     title: z.string(),
     company: z.string(),
-    startDate: z.number(),
+    startDate: z.number().optional(),
     endDate: z.number().optional(),
+    // Open source projects
+    link: z.string().optional(),
+    description: z.string().optional(),
   }),
 });
 

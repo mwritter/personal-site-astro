@@ -5,10 +5,22 @@ startDate: 2019
 endDate: 2022
 ---
 
-Work closely with team members in a fast paced agile environment using continuous integration and delivery practices.
+Built and maintained software across a healthcare platform serving rural healthcare providers and hospitals, working within a small engineering team of approximately 10 engineers.
 
-Improve application stability and performance through features and bug fixes.
 
-Participate in pair programming, mentoring, peer review and onboarding for new engineers.
+Contributed across the core platform, including electronic health records, appointment scheduling, reporting, and clinical workflows.
 
-Implement full stack solutions to achieve client goals related to workflow improvements, patient privacy, client reporting, HIPAA auditing, and encounter charting.
+
+Built PHP-based reporting systems that aggregated hospital records and generated scheduled reports through cron-based processing.
+
+
+Developed features and APIs handling sensitive patient information and worked within the security and privacy constraints of healthcare software.
+
+
+Improved application stability and performance through feature development, bug fixes, and system improvements across the platform.
+
+
+Participated in continuous integration and delivery practices within a fast-paced Agile engineering environment.
+
+
+Mentored engineers through pair programming, peer reviews, onboarding, and collaborative development.
