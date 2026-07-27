@@ -27,6 +27,7 @@
   "devDependencies": {
     "@storybook-astro/framework": "^1.8.0",
     "@storybook/builder-vite": "^10.5.0",
+    "sharp": "^0.35.3",
     "storybook": "^10.5.0",
     "wrangler": "^4.111.0"
   }
