@@ -3,7 +3,7 @@ const normalize = (path: string) => path.replace(/\/$/, "") || "/";
 
 const LINKS = [
   { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
+  { href: "/blog", label: "Writing" },
 ];
 
 const current = normalize(Astro.url.pathname);
@@ -25,7 +25,7 @@ const url = Astro.url.pathname;
       ))
     }
     <div class="active-bar">
-      <div class="active-thumb" transition:name="nav-thumb"></div>
+      <div class="active-thumb"></div>
     </div>
   </div>
 </nav>

@@ -42,6 +42,8 @@ if (startDate) {
 
 <style>
   .resume-section {
+    break-inside: avoid;
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -75,5 +77,23 @@ if (startDate) {
   a {
     white-space: nowrap;
     width: min-content;
+  }
+
+  @media print {
+    .resume-section {
+      gap: 0.75rem;
+    }
+    .content {
+      gap: 0.5rem;
+      font-size: 13px;
+    }
+    .subtext {
+      opacity: 0.8;
+      font-size: 11px;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #bbb;
+    }
   }
 </style>

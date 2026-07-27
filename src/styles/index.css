@@ -1,6 +1,8 @@
 :root {
     --primary-color: #8AA7BD;
     --secondary-color: #2C4E6E;
+
+    --light-white: rgb(214, 222, 235);
 }
 
 * {
@@ -28,13 +30,6 @@
     padding: 2rem;
   }
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: normal;
-  }
-
   a {
     text-decoration: none;
     color: inherit;
@@ -44,3 +39,55 @@
     padding: 0;
     margin: 0;
   }
+
+/* Code blocks (Shiki-highlighted markdown) */
+pre.astro-code {
+  background-color: var(--secondary-color) !important;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  box-shadow: 0 2px 8px rgba(44, 78, 110, 0.35);
+  color: var(--light-white)
+}
+
+pre.astro-code code {
+  font-family: var(--font-fira-mono);
+}
+
+/* Plain-text blocks (ASCII diagrams): tight line height so box-drawing
+   characters connect, and a system mono font so every glyph — letters and
+   box-drawing alike — shares the same width and columns stay aligned. */
+pre.astro-code[data-language="text"],
+pre.astro-code[data-language="text"] code {
+  font-family: ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  line-height: 1.2;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background-color: rgba(44, 78, 110, 0.25);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+@page {
+  margin: 0.6in;
+}
+
+@media print {
+  html,
+  body {
+    height: auto;
+  }
+  body {
+    background-color: white;
+    color: black;
+  }
+  #main-content {
+    max-width: 100%;
+    padding: 0;
+  }
+}

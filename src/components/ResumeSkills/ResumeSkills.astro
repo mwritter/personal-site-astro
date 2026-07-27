@@ -1,0 +1,39 @@
+---
+interface Props {
+  title: string;
+  skills: string[];
+}
+const { title, skills } = Astro.props;
+---
+
+<div class="resume-skill">
+  <p class="title">{title}</p>
+  <p class="skills">
+    {skills.map((skill) => <span class="skill">{skill}</span>)}
+  </p>
+</div>
+
+<style>
+  .resume-skill {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: smaller;
+
+    > p:first-of-type {
+      font-weight: 900;
+    }
+  }
+  .skill {
+    &:not(:last-child)::after {
+      content: " · ";
+    }
+  }
+
+  @media print {
+    .resume-skill {
+      font-size: 12px;
+      gap: 0.1rem;
+    }
+  }
+</style>

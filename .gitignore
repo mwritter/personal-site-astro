@@ -1,11 +1,15 @@
 # build output
 dist/
+storybook-static/
 
 # generated types
 .astro/
 
 # dependencies
 node_modules/
+
+# pnpm local package store (fallback cache, machine-specific)
+.pnpm-store/
 
 # logs
 npm-debug.log*
@@ -17,8 +21,9 @@ pnpm-debug.log*
 .env
 .env.production
 
-# wrangler local state
+# wrangler local state and secrets
 .wrangler/
+.dev.vars
 
 # macOS-specific files
 .DS_Store

@@ -1,0 +1,36 @@
+---
+interface Props {
+  info: string[];
+  size: "sm" | "md" | "lg";
+}
+
+const { info, size } = Astro.props;
+---
+
+<pre
+  class="info-box"
+  data-size={size}>
+  {info?.map((i) => <p>{i}</p>)}
+  <slot />
+</pre>
+
+<style>
+  .info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 2px solid var(--light-white);
+    padding: 0.5rem 0;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+
+    &[data-size="sm"] {
+      max-width: 500px;
+    }
+
+    &[data-size="md"] {
+      width: 50%;
+    }
+  }
+</style>

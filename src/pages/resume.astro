@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import ResumeSection from "../components/ResumeSection/ResumeSection.astro";
+import ResumeSkills from "../components/ResumeSkills/ResumeSkills.astro";
 
 const sections = (await getCollection("resume")).sort((a, b) => {
   if (a.data.startDate && b.data.startDate) {
@@ -46,7 +47,7 @@ const sections = (await getCollection("resume")).sort((a, b) => {
       </p>
     </section>
 
-    <section>
+    <section class="experience">
       <h2>Experience</h2>
       <div class="resume-sections">
         {sections.map((section) => <ResumeSection section={section} />)}
@@ -61,36 +62,58 @@ const sections = (await getCollection("resume")).sort((a, b) => {
     </section>
     <section>
       <h2>Technical Skills</h2>
-      <div class="note-list">
-        <p>Languages</p>
-        <p>TypeScript · JavaScript · Go · Rust · Python · PHP</p>
-      </div>
-      <div class="note-list">
-        <p>Frontend & Product Engineering</p>
-        <p>
-          React · Next.js · Astro · Vite · Storybook · HTML · CSS · SCSS ·
-          Tailwind CSS
-        </p>
-      </div>
-      <div class="note-list">
-        <p>Backend & APIs</p>
-        <p>Node.js · Express · GraphQL · REST APIs · API Design · SQLite</p>
-      </div>
-      <div class="note-list">
-        <p>Engineering & Infrastructure</p>
-        <p>
-          GitHub Actions · CI/CD · Automated Testing · Playwright · Jest · React
-          Testing Library · System Design · Component Libraries · Developer
-          Tooling
-        </p>
-      </div>
-      <div class="note-list">
-        <p>AI & Developer Platforms</p>
-        <p>
-          Model Context Protocol (MCP) · AI Agent Integrations · CLI Development
-          · Developer Experience
-        </p>
-      </div>
+      <ResumeSkills
+        title="Languages"
+        skills={["TypeScript", "JavaScript", "Go", "Rust", "Python", "PHP"]}
+      />
+      <ResumeSkills
+        title="Frontend & Product Engineering"
+        skills={[
+          "React",
+          "Next.js",
+          "Astro",
+          "Vite",
+          "Storybook",
+          "HTML",
+          "CSS",
+          "SCSS",
+          "Tailwind CSS",
+        ]}
+      />
+      <ResumeSkills
+        title="Backend & APIs"
+        skills={[
+          "Node.js",
+          "Express",
+          "GraphQL",
+          "REST APIs",
+          "API Design",
+          "SQLite",
+        ]}
+      />
+      <ResumeSkills
+        title="Engineering & Infrastructure"
+        skills={[
+          "GitHub Actions",
+          "CI/CD",
+          "Automated Testing",
+          "Playwright",
+          "Jest",
+          "React Testing Library",
+          "System Design",
+          "Component Libraries",
+          "Developer Tooling",
+        ]}
+      />
+      <ResumeSkills
+        title="AI & Developer Platforms"
+        skills={[
+          "Model Context Protocol (MCP)",
+          "AI Agent Integrations",
+          "CLI Development",
+          "Developer Experience",
+        ]}
+      />
     </section>
   </div>
 </Layout>
@@ -106,27 +129,27 @@ const sections = (await getCollection("resume")).sort((a, b) => {
   section {
     display: grid;
     gap: 0.5rem;
+    break-inside: avoid;
   }
-  .note-list {
-    display: grid;
-    gap: 0.2rem;
-    padding-top: 0.5rem;
-    font-size: smaller;
-
-    > p:first-of-type {
-      font-weight: 800;
-    }
+  section.experience {
+    break-inside: auto;
   }
   .subtext {
     font-size: smaller;
   }
-  .resume-sections {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
+
   h2 {
     font-size: 20px;
     font-weight: 800;
+    break-after: avoid;
+  }
+
+  @media print {
+    #resume {
+      gap: 1rem;
+    }
+    section {
+      gap: 0.4rem;
+    }
   }
 </style>

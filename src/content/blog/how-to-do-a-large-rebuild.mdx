@@ -1,0 +1,525 @@
+---
+title: Rebuilding a Legacy Authentication Frontend Without Breaking the Login Flow
+description: Lessons learned from taking on a large rebuild.
+pubDate: July 26 2026
+updatedDate: July 26 2026
+---
+import InfoBox from "../../components/mdx/InfoBox/InfoBox.astro"
+import InfoSection from "../../components/mdx/InfoSection/InfoSection.astro"
+import FlowDiagram from "../../components/mdx/FlowDiagram/FlowDiagram.astro"
+
+Authentication is one of those parts of an application that is easy to underestimate.
+
+From the outside, a login page seems simple: enter an email, click a button, and get access to the application. Underneath, however, authentication often involves multiple providers, redirects, password recovery, account creation, SSO, consent flows, mobile layouts, and a surprising number of edge cases.
+
+Our authentication experience had grown into two separate applications. One handled provider-based authentication such as Google and GitHub, while a legacy application handled email-based login and signup.
+
+The result worked, but the experience felt fragmented. The two applications had different visual languages and different architectural foundations. Users also had to leave the primary authentication flow to complete certain actions, creating unnecessary friction.
+
+We wanted to change that.
+
+The goal was to create one cohesive authentication experience, reduce friction in the login and signup flows, and make the experience embeddable in other applications. We believed a simpler experience would ultimately lead to better user conversion.
+
+What started as a frontend initiative to 'update the auth flow' eventually involved a JavaScript-to-TypeScript migration, introducing automated end-to-end testing, building a Storybook-driven development workflow, designing an iframe communication layer, and integrating a legacy authentication application into the new experience.
+
+This is what I learned from doing it.
+
+## The problem wasn't just old code
+
+A rewrite is rarely justified simply because code is old. Old code can continue to serve a product perfectly well for years.
+
+In this case, however, the existing architecture was beginning to make the product requirements increasingly difficult to implement.
+
+The authentication experience was split across two applications:
+
+<InfoSection>
+  <InfoBox size="sm" info={["Provider Auth App", "Google, Github, SSO"]} />
+  <InfoBox size="sm" info={["Legacy Email App", "Email login/signup"]} />
+</InfoSection>
+
+The two applications did different things, but from the user's perspective they were part of the same authentication experience. Someone attempting to sign in with email could be sent to a separate application entirely, with a different design language and different user flows.
+
+The product team wanted to reduce that friction and create a more cohesive login and signup experience. We also wanted to be able to embed authentication into other applications, such as the marketing site, so users could authenticate without being pulled away from the context they were currently in.
+
+Those goals were difficult to achieve with the existing application boundaries. The existing architecture was actively limiting the product experience we wanted to build.
+
+The solution was to create a unified frontend experience while preserving the authentication services that were already working.
+
+Before making large structural changes, however, I needed to solve a more fundamental problem:
+
+**How do you safely change a critical authentication application when you don't have tests protecting its existing behavior?**
+
+## First, establish a safety net
+
+The authentication frontend had no end-to-end test suite and no unit tests covering the actual user flows.
+
+I did not start by migrating JavaScript to TypeScript.
+
+I started by making the existing behavior observable.
+
+Before changing the architecture, I identified the critical authentication flows and began adding Playwright tests around them. These tests covered the behavior we needed to preserve while the application changed underneath them.
+
+The exact flows varied, but included things like:
+
+- Provider login
+
+- Email login
+
+- Signup
+
+- Password recovery
+
+- Password verification
+
+- Redirects and authentication completion
+
+The important thing was not to test every line of the existing application. The important thing was to identify the behavior that mattered to users and protect it.
+
+Once those tests existed, I automated them in CI. Every pull request had to pass type checking, a production build, and the Playwright suite before it could be merged:
+
+<FlowDiagram steps={[
+  "Pull Request",
+  "Type Check + Build + E2E Tests",
+  "Code Review",
+  "Merge"
+]} />
+
+The test suite was not only about preventing regressions.
+
+It enabled the refactor. I could make a change, run the critical flows, and get immediate feedback about whether I had changed something important. That gave me the confidence to make large structural changes without relying entirely on manually clicking through the application and hoping I hadn't broken something.
+
+The tests were not proof that the entire application was correct. They were a behavioral safety net around the parts of the system that mattered most.
+
+Once the critical behavior was covered, the real migration could begin.
+
+## Making the codebase easier to change
+
+The authentication application was written entirely in JavaScript and had no static type system.
+
+The problem wasn't that JavaScript is incapable of supporting large applications. It absolutely can.
+
+The problem was that, in this particular codebase, the lack of types made it harder to understand the contracts between different parts of the system.
+
+When data moved through the application, there was often no clear indication of what shape it was expected to have. A change in one place could affect another part of the application without the relationship being obvious.
+
+TypeScript gave us better tools for understanding those contracts.
+
+The goal was not to convert the entire application in one massive operation and then declare victory. The goal was to migrate incrementally while avoiding the creation of an unnecessarily complicated type system.
+
+A JavaScript-to-TypeScript migration is mostly mechanical work, but that doesn't mean it is completely trivial. The compiler will expose unknown contracts and inconsistencies, but someone still needs to decide what those contracts should actually be.
+
+This is also an area where an LLM can be extremely useful.
+
+An LLM can accelerate the mechanical parts of a migration:
+
+- Adding initial type annotations
+
+- Converting obvious JavaScript patterns
+
+- Identifying likely types
+
+- Helping work through compiler errors
+
+But generating types is not the same as designing a type system.
+
+An automated migration can easily produce technically valid TypeScript that is unnecessarily complex, overly generic, or simply encodes the existing problems rather than improving them.
+
+My preference is to use an LLM to accelerate the migration, but not to outsource the design of the type system.
+
+Migrate incrementally. Let the compiler expose unknown contracts. Improve the types as the code is touched.
+
+The goal should be a type system that makes the code easier to understand not one that merely makes the compiler stop complaining.
+
+## Storybook as a state exploration tool
+
+Authentication applications have a surprisingly large state space.
+
+A user might be:
+
+```text
+Login
+├── Provider login
+├── Email login
+└── SSO login
+
+Signup
+├── Provider signup
+└── Email signup
+
+Account recovery
+├── Forgot password
+├── Verify password
+└── Reset password
+
+Other
+├── Authorize an external application
+├── Accept terms of service
+└── Mobile / desktop variations
+```
+
+Reviewing all of these states through the actual application can be difficult.
+
+To reach a particular state, you may need to create an account, configure a provider, trigger a specific error, or navigate through a series of redirects.
+
+Storybook gave us a much simpler interface:
+
+**Select the state you want to see.**
+
+Storybook is excellent for developing and documenting components, but in this project I found it was useful for something broader. It became a way to make the application's different states directly observable.
+
+I could develop individual components in isolation, but I could also create stories representing complete pages and specific application states. Because those pages depend on API responses, the stories used mocked network requests and importantly, the same mock infrastructure was shared between the stories and the end-to-end tests. The state a designer reviewed in Storybook and the state a Playwright test asserted against were built from the same fixtures.
+
+That made it easier for engineering, design, and product to review the experience.
+
+I also set up a dedicated Vercel project to build and host the Storybook instance for every pull request. This meant that a pull request could produce a preview environment that product and design could review before the changes were merged.
+
+The workflow became:
+
+<FlowDiagram steps={[
+  "Pull Request",
+  "Build Storybook",
+  "Deploy Preview",
+  "Product + Design Review",
+  "Engineering Review",
+  "Merge"
+]}/>
+
+This changed Storybook from being purely a developer tool into a shared review environment.
+
+Instead of asking someone to manually navigate through a complicated authentication flow to find a particular state, we could send them directly to the state we wanted them to review.
+
+It also made the UI easier to test. Individual stories doubled as component-level tests each story ran in a real browser in CI, giving us more granular feedback in addition to the end-to-end tests protecting the overall user flows.
+
+## Designing for two execution contexts
+
+The rebuilt authentication application needed to work in two different contexts.
+
+As a standalone application:
+
+<FlowDiagram steps={[
+  "Browser",
+  "Auth Application"
+]} />
+
+And embedded inside another application:
+
+<FlowDiagram steps={[
+  "Host Application",
+  "Dialog",
+  "Auth iframe"
+]} />
+
+The authentication application still needed to own the authentication experience. The host application needed to own the surrounding product experience.
+
+That created a boundary between two independently running applications.
+
+The first step was making the authentication application aware of the context in which it was running:
+
+```ts
+function isIframe(): boolean {
+  return window.self !== window.top
+}
+```
+
+This allowed the application to adjust its behavior when embedded.
+
+It is important to note that this is a behavioral signal, not a security boundary. Security decisions still need to be based on validated origins and the authentication system itself.
+
+The embedded experience also needed to feel like part of the host application. The user shouldn't feel like they had been sent to another website inside a box.
+
+The host application rendered the authentication application inside a dialog:
+
+<InfoSection>
+  <InfoBox size="sm">
+    <pre>Host Application</pre>
+    <InfoSection>
+    <InfoBox info={["Auth iframe", "Login / Signup"]}/>
+  </InfoSection>
+  </InfoBox>
+</InfoSection>
+
+The initial implementation technically worked, but there were immediate problems.
+
+The iframe had its own dimensions. The dialog had its own dimensions. The content could change as the user moved between different authentication states.
+
+If the dialog was too small, the iframe would scroll. If it was too large, the experience would feel awkward and disconnected from the host application.
+
+The two applications needed to communicate.
+
+## Creating a communication boundary
+
+The host application needed to know things about the authentication application:
+
+- When the content changed size
+
+- When authentication completed
+
+- Potentially other state changes required by the host
+
+The authentication application needed a way to communicate those events to its parent.
+
+For this, we used `postMessage`.
+
+The important part of this system is not simply calling `postMessage`.
+
+Cross-origin communication needs an explicit contract.
+
+Ours was small a discriminated union describing every message the iframe was allowed to send:
+
+```ts
+type IframeMessage =
+  | {
+      type: 'CONTENT_RESIZE'
+      payload: {width: number; height: number}
+    }
+  | {
+      type: 'AUTH_SUCCESS'
+      payload?: {redirectTo?: string}
+    }
+```
+
+The receiver needs to validate:
+
+- Where the message came from
+
+- What type of message it is
+
+- Whether the message has the expected shape
+
+### Who is the parent, anyway?
+
+Validating "where the message goes" turned out to be more interesting than expected.
+
+To send a message to a specific origin, the iframe needs to know the origin of the page embedding it. But an iframe can't simply ask its parent who it is and the value you might reach for, `document.referrer`, is only reliable on the very first page load. As soon as the user moves through an authentication redirect chain, the referrer starts pointing at intermediate services rather than the true host application.
+
+The solution was to capture the parent origin once, on initial load, validate it against an allowlist of origins permitted to embed the application, and persist it in `sessionStorage` so it survived full-page redirects. Every outgoing message was then checked against that validated origin:
+
+```ts
+function postMessageToParent(
+  message: IframeMessage,
+  parentOrigin: string
+): void {
+  if (!isAllowedParentOrigin(parentOrigin)) {
+    return
+  }
+
+  window.parent.postMessage(message, parentOrigin)
+}
+```
+
+Not every message needs the same level of protection, though. This became a useful lesson in making security decisions per message type rather than globally. An `AUTH_SUCCESS` message is only ever sent to the validated parent origin. A resize message, on the other hand, contains nothing sensitive it's just a width and a height so it can be broadcast without the strict origin requirement. Being deliberate about that distinction kept the sensitive path strict without making the layout path brittle.
+
+### Detecting size changes
+
+For the resize messages themselves, the authentication application observes its own content with a `ResizeObserver` and reports changes to the parent (debounced, and only when the size actually changed):
+
+```ts
+useEffect(() => {
+  if (!isIframe() || !ref.current) return
+
+  const observer = new ResizeObserver(() => {
+    const width = element.offsetWidth
+    const height = element.offsetHeight
+
+    if (width === lastWidth && height === lastHeight) return
+
+    postMessageToParent(
+      {type: 'CONTENT_RESIZE', payload: {width, height}},
+      parentOrigin
+    )
+  })
+
+  observer.observe(ref.current)
+
+  return () => observer.disconnect()
+}, [ref])
+```
+
+On the host application side, the dialog starts with an estimated size pulled from inspecting the actual form component for the requested view, shows a loading state, and then animates to the actual size once the first resize message arrives:
+
+```ts
+useEffect(() => {
+  const handleMessage = (event: MessageEvent) => {
+    // Only accept messages from the auth application's origin
+    if (event.origin !== authOrigin) return
+
+    const message = event.data as IframeMessage
+
+    switch (message.type) {
+      case 'CONTENT_RESIZE': {
+        const {width, height} = message.payload
+        setDialogSize({width, height})
+        break
+      }
+
+      case 'AUTH_SUCCESS': {
+        const redirectTo = message.payload?.redirectTo ?? '/entry'
+        window.location.replace(redirectTo)
+        break
+      }
+    }
+  }
+
+  window.addEventListener('message', handleMessage)
+
+  return () => window.removeEventListener('message', handleMessage)
+}, [])
+```
+
+The result is a dialog that always fits its content, even as the user moves between login, signup, and recovery states:
+
+<FlowDiagram steps={[
+  { text: "Auth Application", label: "CONTENT_RESIZE" },
+  "Host Application",
+  "Resize Dialog"
+]} />
+
+The same communication layer carried the authentication events. Once the authentication application successfully authenticated a user, it sent an `AUTH_SUCCESS` message including where the user should land next and the host application performed the navigation.
+
+The important point was that the authentication application and the host application could remain separate while still having a clearly defined communication boundary.
+
+## Provider authentication inside an iframe
+
+There was one more problem.
+
+The authentication application supported third-party providers such as Google and GitHub. We couldn't simply run the entire provider authentication flow inside the iframe. Identity providers generally refuse to be framed, and for good reason, a login page rendered inside someone else's page is exactly what clickjacking looks like.
+
+The provider authentication flow needed to happen in a separate top-level browsing context.
+
+The solution was to use a popup:
+
+<FlowDiagram steps={[
+  "Host Application",
+  "Auth iframe",
+  "Popup Window",
+  "Identity Provider",
+  "Provider Callback"
+]} />
+
+The popup could complete the provider authentication flow and then communicate the result back to the authentication application.
+
+This is where the browser had opinions.
+
+The classic way for a popup to talk back to the window that opened it is `window.opener.postMessage`. But modern Cross-Origin-Opener-Policy (COOP) headers, which identity providers and authentication systems rightly use sever the `window.opener` reference as the popup navigates through the provider's domain. By the time the popup returns to our callback page, it may no longer have any reference to the window that opened it. For the same reason, the opener can't reliably tell whether the popup was closed.
+
+So instead of relying on `window.opener`, I used a `BroadcastChannel`. A `BroadcastChannel` connects every browsing context on the same origin windows, tabs, iframes, and popups regardless of how they were opened. The popup ends its journey on a callback page served from our own origin, so at that point it can broadcast the result to whoever is listening:
+
+```ts
+export function notifyAuthProviderCompleted(payload?: {
+  redirectTo?: string
+}) {
+  const channel = new BroadcastChannel(AUTH_CHANNEL_NAME)
+
+  channel.postMessage({
+    type: 'AUTH_COMPLETED',
+    payload
+  })
+
+  channel.close()
+  window.close()
+}
+```
+
+The flow then became:
+
+<FlowDiagram steps={[
+  "Host Application",
+  { text: "Auth iframe", label: "Opens" },
+  "Popup Window",
+  "Identity Provider",
+  { text: "Provider Callback", label: "BroadcastChannel" },
+  { text: "Auth iframe", label: "postMessage" },
+  "Host Application"
+]} />
+
+The popup handled the provider interaction, the authentication application handled the result, and the host application could respond to the completed authentication flow.
+
+There was one more piece of browser reality to handle: popups can be blocked. When that happened, the application fell back to a full-page navigation to the provider losing the embedded experience for that user, but never losing the ability to log in. Graceful degradation beat a broken button.
+
+This kept the responsibilities separated:
+
+- The provider handled provider authentication.
+
+- The popup handled the top-level provider interaction.
+
+- The authentication application handled the authentication experience.
+
+- The host application handled the surrounding product experience.
+
+## Integrating the legacy email authentication application
+
+The email authentication application was a React frontend with its own backend service. That backend already handled the difficult parts of email authentication:
+
+- Login
+
+- Signup
+
+- Forgot password
+
+- Password verification
+
+The authentication service itself was already working. The problem was primarily the frontend experience. This gave us an important opportunity to reduce the scope and risk of the rewrite. We didn't need to rewrite the authentication backend. We could replace the frontend while preserving the existing service behind it.
+
+Before:
+
+<FlowDiagram steps={[
+  "Email Auth Frontend",
+  "Email Auth Backend",
+  "Existing Authentication System"
+]} />
+
+After:
+
+<FlowDiagram steps={[
+  "Unified Auth Frontend",
+  "Existing Email Auth Backend",
+  "Existing Authentication System"
+]} />
+
+The work involved moving the relevant views into the new authentication application and ensuring they could continue to communicate with the existing email authentication endpoints.
+
+The existing end-to-end tests were particularly useful during this part of the work. The frontend implementation was changing, but the expected behavior of the authentication flows needed to remain consistent.
+
+Once the new frontend was in place, the legacy frontend could be deprecated. There was still one migration concern: users might have old links pointing to the legacy application. To handle that, I added middleware to the email authentication server to redirect lingering links from the legacy frontend to the new authentication experience.
+
+This is one of the lessons I find particularly important when modernizing systems:
+
+> **You don't always need to replace everything. Replace the part that needs replacing and preserve the part that already works.**
+
+## What I learned
+
+The most important lesson from this project was that a rewrite is not a single technical decision.
+
+It is a sequence of decisions that reduce risk.
+
+Before changing the architecture, I needed a way to understand and verify the behavior that already existed. That meant adding end-to-end tests and making the critical authentication flows observable.
+
+The tests did not make the application magically safe. They gave us a way to detect when important behavior changed.
+
+TypeScript then made the codebase easier to reason about and change, but the migration worked because it was incremental. The goal wasn't to create the perfect type system before writing another feature. It was to improve the contracts in the code as the application evolved.
+
+Storybook became more than a component catalog. Because authentication has so many possible states, it became a shared environment where engineering, design, and product could review the experience without having to manually navigate through the entire authentication system.
+
+Finally, embedding the application in an iframe showed that "frontend work" can quickly become a systems problem.
+
+The UI was only one part of the challenge.
+
+We also needed to think about:
+
+- Cross-origin communication and message contracts
+
+- How an embedded application learns and trusts the identity of its host
+
+- Browser security policies like COOP reshaping how windows can communicate
+
+- Provider authentication and top-level browsing contexts
+
+- Dynamic layout across application boundaries
+
+- How two independently deployed applications should work together
+
+The biggest lesson was probably this:
+
+> **A successful rewrite is less about replacing old technology and more about creating enough safety and visibility to change a system with confidence.**
+
+That is what made this project possible.

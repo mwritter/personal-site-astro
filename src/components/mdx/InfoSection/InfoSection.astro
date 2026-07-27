@@ -1,0 +1,28 @@
+---
+interface Props {
+  row?: boolean;
+}
+
+const { row = false } = Astro.props;
+const flow = row ? "row" : "column";
+---
+
+<pre
+  class="info-section astro-code"
+  data-language="text"
+  data-flow={flow}>
+  <slot />
+</pre>
+
+<style>
+  .info-section {
+    display: flex;
+    padding: 1.5rem;
+    gap: 3rem;
+    border-radius: 8px;
+
+    &:not([data-flow="row"]) {
+      flex-direction: column;
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+interface Step {
+  text: string;
+  /** Label shown next to the arrow leading to the next step */
+  label?: string;
+}
+
+interface Props {
+  steps: (string | Step)[];
+}
+
+const { steps } = Astro.props;
+const items = steps.map((step) =>
+  typeof step === "string" ? { text: step } : step,
+);
+---
+
+<div class="flow-diagram">
+  {
+    items.map((step, i) => (
+      <div class="step">
+        <span class="node">{step.text}</span>
+        {i < items.length - 1 && (
+          <span class="connector">
+            <svg
+              class="arrow"
+              viewBox="0 0 12 34"
+              width="12"
+              height="34"
+              aria-hidden="true"
+            >
+              <line
+                x1="6"
+                y1="0"
+                x2="6"
+                y2="24"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path d="M1 24 L11 24 L6 33 Z" fill="currentColor" />
+            </svg>
+            {step.label && <span class="label">{step.label}</span>}
+          </span>
+        )}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .flow-diagram {
+    display: grid;
+    background-color: var(--secondary-color);
+    color: var(--light-white);
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 8px rgba(44, 78, 110, 0.35);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .node {
+    padding: 0.2rem;
+  }
+
+  .connector {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.3rem 0;
+  }
+
+  .arrow {
+    display: block;
+    opacity: 0.8;
+    margin-left: 40px;
+  }
+
+  .label {
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    opacity: 0.75;
+  }
+</style>
