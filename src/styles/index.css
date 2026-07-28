@@ -1,8 +1,9 @@
 :root {
     --primary-color: #8AA7BD;
     --secondary-color: #2C4E6E;
-
-    --light-white: rgb(214, 222, 235);
+    --foreground-color-dark: rgb(30, 32, 34);
+    --foreground-color-light: rgb(214, 222, 235);
+    --foreground-color: var(--foreground-color-light);
 }
 
 * {
@@ -49,7 +50,6 @@ pre.astro-code {
   font-size: 0.875rem;
   line-height: 1.7;
   box-shadow: 0 2px 8px rgba(44, 78, 110, 0.35);
-  color: var(--light-white)
 }
 
 pre.astro-code code {

@@ -19,11 +19,12 @@ const { info, size } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border: 2px solid var(--light-white);
+    border: 2px solid var(--foreground-color-light);
     padding: 0.5rem 0;
     width: 100%;
     text-align: center;
     margin: 0 auto;
+    color: var(--foreground-color-light);
 
     &[data-size="sm"] {
       max-width: 500px;
