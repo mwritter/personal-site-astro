@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import FadeInImage from "../components/FadeInImage/FadeInImage.astro";
 import HeroSection from "../components/HeroSection/HeroSection.astro";
 import NameTag from "../components/NameTag.tsx/NameTag.astro";
 import Layout from "../layouts/Layout.astro";
@@ -13,7 +13,12 @@ import beachImage from "../assets/beach.jpg";
   <HeroSection>
     <div class="wrapper">
       <div class="about-image-section">
-        <Image src={beachImage} alt="" />
+        <FadeInImage
+          src={beachImage}
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+        />
       </div>
       <div class="name-tag">
         <NameTag name="Matthew" />

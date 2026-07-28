@@ -5,8 +5,12 @@ import react from "@astrojs/react";
 
 import mdx from "@astrojs/mdx";
 
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
+  site: "https://mwritter.me",
+
   fonts: [
     {
       provider: fontProviders.fontsource(),
@@ -25,7 +29,7 @@ export default defineConfig({
     },
   ],
 
-  integrations: [react(), mdx()],
+  integrations: [react(), mdx(), sitemap()],
 
   markdown: {
     shikiConfig: {

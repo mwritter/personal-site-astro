@@ -1,0 +1,40 @@
+---
+import { getImage } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import JsonLd from "./JsonLd.astro";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+
+// Social platforms and search engines don't handle SVG images well
+const coverImage =
+  post.data.coverImage && post.data.coverImage.format !== "svg"
+    ? await getImage({
+        src: post.data.coverImage,
+        width: 1200,
+        format: "jpeg",
+        background: "#8AA7BD",
+      })
+    : undefined;
+
+const data = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  datePublished: post.data.pubDate?.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate)?.toISOString(),
+  ...(coverImage && { image: new URL(coverImage.src, Astro.site).href }),
+  author: {
+    "@type": "Person",
+    name: "Matthew Ritter",
+    url: Astro.site?.href,
+  },
+};
+---
+
+<JsonLd data={data} />

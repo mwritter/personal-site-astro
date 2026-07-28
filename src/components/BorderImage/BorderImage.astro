@@ -1,11 +1,11 @@
 ---
-import { Image } from "astro:assets";
+import FadeInImage from "../FadeInImage/FadeInImage.astro";
 
 const { src } = Astro.props;
 ---
 
 <div class="border-image">
-  <Image class="img" src={src} alt="" />
+  <FadeInImage class="img" src={src} alt="" loading="eager" fetchpriority="high" />
 </div>
 
 <style>

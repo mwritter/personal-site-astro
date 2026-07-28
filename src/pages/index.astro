@@ -3,10 +3,24 @@ import HeroSection from "../components/HeroSection/HeroSection.astro";
 import BorderImage from "../components/BorderImage/BorderImage.astro";
 import Layout from "../layouts/Layout.astro";
 import RecentBlogPost from "../components/RecentBlogPosts/RecentBlogPosts.astro";
+import JsonLd from "../components/JsonLd/JsonLd.astro";
 import meImage from "../assets/me.jpg";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Matthew Ritter",
+  url: Astro.site?.href,
+  jobTitle: "Software Engineer",
+  sameAs: [
+    "https://www.github.com/mwritter",
+    "https://www.linkedin.com/in/mwritter",
+  ],
+};
 ---
 
 <Layout>
+  <JsonLd slot="head" data={jsonLd} />
   <div class="container">
     <HeroSection>
       <p id="home-page-heading">

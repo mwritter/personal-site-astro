@@ -1,0 +1,33 @@
+---
+import { Image } from "astro:assets";
+import type { ComponentProps } from "astro/types";
+
+type Props = ComponentProps<typeof Image>;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<Image
+  {...props}
+  class:list={["fade-in-image", className]}
+  onload="this.dataset.loaded = 'true'"
+  onerror="this.dataset.loaded = 'true'"
+/>
+
+<style is:global>
+  .fade-in-image {
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+  }
+
+  .fade-in-image[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in-image {
+      opacity: 1;
+      transition: none;
+    }
+  }
+</style>

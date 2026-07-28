@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://mwritter.me/sitemap-index.xml
