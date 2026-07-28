@@ -5,9 +5,7 @@ const { src } = Astro.props;
 ---
 
 <div class="border-image">
-  <div class="image-wrapper">
-    <Image class="img" src={src} alt="" />
-  </div>
+  <Image class="img" src={src} alt="" />
 </div>
 
 <style>
@@ -23,17 +21,12 @@ const { src } = Astro.props;
     padding: 1rem;
   }
 
-  .border-image .image-wrapper {
-    min-width: 280px;
+  .border-image img {
+    height: auto;
     width: 100%;
     background-color: var(--primary-color);
     border-radius: 20px;
     overflow: hidden;
-  }
-
-  .img {
-    width: 100%;
-    height: auto;
     object-fit: cover;
   }
 </style>
