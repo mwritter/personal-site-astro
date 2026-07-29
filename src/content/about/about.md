@@ -2,8 +2,6 @@
 
 Hi, I'm Matthew.
 
-Im I software engineer by trade, and I love building things. 
-
 I'm a Senior Software Engineer with over a decade of experience building software across the stack. Most of my career has been spent building web applications with TypeScript, React, and Node.js, but what has kept me interested over the years hasn't been any particular framework—it's solving interesting problems.
 
 I'm drawn to projects where there's a difficult technical challenge hiding beneath a simple user experience. Whether that's modernizing a legacy application, designing developer tooling, improving engineering workflows, or figuring out how to safely evolve a system that's been in production for years, I enjoy understanding how software works and finding thoughtful ways to make it better.
