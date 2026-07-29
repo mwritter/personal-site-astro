@@ -1,0 +1,18 @@
+<div class="prose">
+  <slot />
+</div>
+
+<style>
+  .prose {
+    display: grid;
+    gap: 2rem;
+  }
+  .prose :global(a) {
+    color: var(--secondary-color);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose :global(a:hover) {
+    text-decoration-thickness: 2px;
+  }
+</style>

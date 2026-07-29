@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import BlogPostingJsonLd from "../../components/JsonLd/BlogPostingJsonLd.astro";
+import Prose from "../../components/Prose/Prose.astro";
 import { publishedPostFilter } from "../../content.config";
 
 export async function getStaticPaths() {
@@ -39,7 +40,9 @@ const { Content } = await render(post);
       )
     }
     <h1>{post.data.title}</h1>
-    <Content />
+    <Prose>
+      <Content />
+    </Prose>
   </div>
 </Layout>
 
