@@ -144,12 +144,26 @@ const sections = (await getCollection("resume")).sort((a, b) => {
     break-after: avoid;
   }
 
+  /* Chrome fragments flex and grid containers unreliably across printed pages:
+     headings get painted twice at the break and whole blocks can disappear.
+     Plain block flow with margins paginates correctly. */
   @media print {
     #resume {
-      gap: 1rem;
+      display: block;
+    }
+    #resume > div,
+    #resume > section {
+      margin-bottom: 1rem;
     }
     section {
-      gap: 0.4rem;
+      display: block;
+    }
+    section > * + * {
+      margin-top: 0.4rem;
+    }
+    p {
+      orphans: 3;
+      widows: 3;
     }
   }
 </style>

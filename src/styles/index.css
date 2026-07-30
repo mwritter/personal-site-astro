@@ -231,6 +231,7 @@ pre.astro-code[data-language="text"] code {
     height: auto;
   }
   body {
+    display: block;
     background-color: white;
     color: black;
   }

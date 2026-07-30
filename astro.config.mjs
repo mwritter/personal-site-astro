@@ -16,6 +16,7 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: "Fira Mono",
       cssVariable: "--font-fira-mono",
+      weights: [400, 700],
     },
     {
       provider: fontProviders.fontsource(),

@@ -32,8 +32,9 @@ const { title, skills } = Astro.props;
 
   @media print {
     .resume-skill {
+      display: block;
       font-size: 12px;
-      gap: 0.1rem;
+      break-inside: avoid;
     }
   }
 </style>

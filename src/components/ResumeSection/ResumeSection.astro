@@ -81,11 +81,19 @@ if (startDate) {
 
   @media print {
     .resume-section {
-      gap: 0.75rem;
+      display: block;
+      padding-top: 0.75rem;
+    }
+    .info {
+      display: block;
     }
     .content {
-      gap: 0.5rem;
+      display: block;
+      margin-top: 0.75rem;
       font-size: 13px;
+    }
+    .content > * + * {
+      margin-top: 0.5rem;
     }
     .subtext {
       opacity: 0.8;
