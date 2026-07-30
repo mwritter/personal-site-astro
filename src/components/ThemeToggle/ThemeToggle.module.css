@@ -1,0 +1,55 @@
+.theme-toggle {
+    display: grid;
+    place-content: center;
+    height: 34px;
+    width: 34px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    color: var(--color-ink-muted);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      color 0.2s var(--ease),
+      transform 0.2s var(--ease);
+  }
+
+  .theme-toggle:hover {
+    background-color: var(--color-surface-hover);
+    color: var(--color-ink);
+    transform: translateY(-1px);
+  }
+
+  .icon {
+    height: 16px;
+    width: 16px;
+    grid-area: 1 / 1;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .theme-toggle:hover .icon {
+    transform: rotate(20deg);
+  }
+
+  .icon-moon {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .icon-sun {
+      display: none;
+    }
+
+    :global(:root:not([data-theme="light"])) .icon-moon {
+      display: block;
+    }
+  }
+
+  :global(:root[data-theme="dark"]) .icon-sun {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .icon-moon {
+    display: block;
+  }

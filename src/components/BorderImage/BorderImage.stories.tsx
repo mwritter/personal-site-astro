@@ -1,5 +1,5 @@
 import BorderImage from "./BorderImage.astro";
-import meImage from '../../assets/me.jpg'
+import meImage from '../../assets/me.png'
 
 export default {
     title: 'Component/BorderImage',

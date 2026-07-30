@@ -15,7 +15,7 @@ const items = steps.map((step) =>
 );
 ---
 
-<div class="flow-diagram">
+<div class="flow-diagram astro-code">
   {
     items.map((step, i) => (
       <div class="step">
@@ -50,12 +50,9 @@ const items = steps.map((step) =>
 <style>
   .flow-diagram {
     display: grid;
-    background-color: var(--secondary-color);
-    color: var(--foreground-color-light);
     border-radius: 8px;
     padding: 1.5rem;
     font-size: 0.875rem;
-    box-shadow: 0 2px 8px rgba(44, 78, 110, 0.35);
   }
 
   .step {

@@ -1,0 +1,47 @@
+---
+import { randomScribble, SCRIBBLE_VIEWBOX } from "../../utils/scribble";
+
+const scribble = randomScribble();
+---
+
+<svg
+  class="scribble"
+  viewBox={`0 0 ${SCRIBBLE_VIEWBOX.width} ${SCRIBBLE_VIEWBOX.height}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path pathLength="1" d={scribble}></path>
+</svg>
+
+<style>
+  .scribble {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(108%, 4.4em);
+    height: 1.85em;
+    transform: translate(-50%, -50%);
+    overflow: visible;
+    pointer-events: none;
+    color: var(--color-accent-warm);
+  }
+
+  .scribble path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.9;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: scribble-draw 0.7s var(--ease) 0.15s forwards;
+  }
+
+  @keyframes scribble-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

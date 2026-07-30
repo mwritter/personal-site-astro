@@ -1,0 +1,16 @@
+---
+import MoonIcon from "./MoonIcon.astro";
+import SunIcon from "./SunIcon.astro";
+import styles from "./ThemeToggle.module.css";
+---
+
+<button
+  class={styles["theme-toggle"]}
+  type="button"
+  data-theme-toggle
+  aria-label="Toggle color theme"
+  title="Toggle color theme"
+>
+  <SunIcon class={`${styles.icon} ${styles["icon-sun"]}`} />
+  <MoonIcon class={`${styles.icon} ${styles["icon-moon"]}`} />
+</button>

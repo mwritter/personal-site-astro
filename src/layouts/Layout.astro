@@ -4,7 +4,7 @@ import type { ImageMetadata } from "astro";
 import { ClientRouter } from "astro:transitions";
 import PageNav from "../components/PageNav/PageNav.astro";
 import Footer from "../components/Footer/Footer.astro";
-import defaultOgImage from "../assets/me.jpg";
+import defaultOgImage from "../assets/me.png";
 import "../styles/index.css";
 
 interface Props {
@@ -51,6 +51,18 @@ const ogImageURL = new URL(ogImage.src, Astro.site);
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#8AA7BD" />
+    <script is:inline>
+      try {
+        var stored = localStorage.getItem("theme");
+        if (stored === "light" || stored === "dark") {
+          document.documentElement.dataset.theme = stored;
+        }
+      } catch (e) {}
+    </script>
+    <script>
+      import { setupTheme } from "../utils/theme";
+      setupTheme();
+    </script>
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -79,7 +91,9 @@ const ogImageURL = new URL(ogImage.src, Astro.site);
     }
     <meta
       name="twitter:card"
-      content={shareImage !== defaultOgImage ? "summary_large_image" : "summary"}
+      content={shareImage !== defaultOgImage
+        ? "summary_large_image"
+        : "summary"}
     />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />

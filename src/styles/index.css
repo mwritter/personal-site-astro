@@ -1,55 +1,177 @@
+/* `light dark` is what lets light-dark() below resolve against the OS setting,
+   so the site themes itself with no JS. The [data-theme] rules pin it to one
+   scheme when the visitor has explicitly chosen; absent that attribute the OS
+   wins, including when it changes while the page is open. */
 :root {
-    --primary-color: #8AA7BD;
-    --secondary-color: #2C4E6E;
-    --foreground-color-dark: rgb(30, 32, 34);
-    --foreground-color-light: rgb(214, 222, 235);
-    --foreground-color: var(--foreground-color-light);
+  color-scheme: light dark;
+
+  --color-bg: light-dark(#8aa7bd, #0d1a24);
+  --color-bg-sunken: light-dark(#7c9bb2, #08131b);
+  --color-surface: light-dark(rgba(255, 255, 255, 0.26), rgba(138, 167, 189, 0.09));
+  --color-surface-hover: light-dark(rgba(255, 255, 255, 0.44), rgba(138, 167, 189, 0.17));
+  --color-panel: light-dark(#2c4e6e, #16293a);
+  --color-panel-ink: light-dark(#e3ecf4, #d6deeb);
+
+  --color-ink: light-dark(#16242f, #d6deeb);
+  --color-ink-muted: light-dark(#3b5568, #9db1c3);
+  --color-ink-faint: light-dark(#566f83, #7a90a3);
+
+  --color-accent: light-dark(#24425f, #9cc2e0);
+  --color-on-accent: light-dark(#eaf1f7, #0d1a24);
+  --color-accent-warm: light-dark(#b64f27, #f78c6c);
+  --color-border: light-dark(rgba(22, 36, 47, 0.2), rgba(214, 222, 235, 0.16));
+  --color-border-strong: light-dark(rgba(22, 36, 47, 0.42), rgba(214, 222, 235, 0.32));
+
+  --shadow-sm: 0 1px 2px light-dark(rgba(17, 32, 43, 0.16), rgba(0, 0, 0, 0.4));
+  --shadow-md: 0 6px 18px light-dark(rgba(17, 32, 43, 0.18), rgba(0, 0, 0, 0.45));
+  --shadow-lg: 0 14px 34px light-dark(rgba(17, 32, 43, 0.24), rgba(0, 0, 0, 0.55));
+
+  /* Backwards-compatible aliases: older components still reference these. */
+  --primary-color: var(--color-bg);
+  --secondary-color: var(--color-panel);
+  --foreground-color-dark: var(--color-ink);
+  --foreground-color-light: #d6deeb;
+  --foreground-color: var(--color-panel-ink);
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: clamp(2rem, 1.4rem + 2.4vw, 2.75rem);
+
+  --measure: 68ch;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-section: clamp(3.5rem, 2rem + 6vw, 6rem);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-  html,
-  body {
-    width: 100%;
-    height: 100%;
-  }
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
 
-  body {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--primary-color);
-    font-family: var(--font-fira-mono);
-  }
-  #main-content {
-    flex: 1;
-    max-width: 1000px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 2rem;
-  }
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
 
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-fira-mono);
+  font-size: var(--text-base);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#main-content {
+  flex: 1;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-8) var(--space-section);
+}
+
+/* Mono runs wide and tall by default, so display sizes need to be pulled
+   back in on both axes to stop headings reading as body copy. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-3xl);
+}
+h2 {
+  font-size: var(--text-2xl);
+}
+h3 {
+  font-size: var(--text-xl);
+}
+h4 {
+  font-size: var(--text-lg);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a[aria-current="page"] {
+  pointer-events: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
 
 /* Code blocks (Shiki-highlighted markdown) */
-pre.astro-code {
-  background-color: var(--secondary-color) !important;
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
+pre.astro-code, div.astro-code {
+  background-color: #011627 !important;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) 1.25rem;
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.7;
-  box-shadow: 0 2px 8px rgba(44, 78, 110, 0.35);
+  box-shadow: var(--shadow-md);
 }
 
 pre.astro-code code {
@@ -67,17 +189,43 @@ pre.astro-code[data-language="text"] code {
 
 /* Inline code */
 :not(pre) > code {
-  background-color: rgba(44, 78, 110, 0.25);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   padding: 0.15em 0.4em;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.9em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @page {
   margin: 0.6in;
 }
 
+/* `:root[data-theme]` matches whichever value is set, so it outranks the
+   color-scheme pins above and forces paper to stay light either way. */
 @media print {
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+    --color-bg: #ffffff;
+    --color-ink: #000000;
+    --color-ink-muted: #333333;
+    --color-ink-faint: #555555;
+    --color-surface: transparent;
+    --color-border: rgba(0, 0, 0, 0.25);
+  }
   html,
   body {
     height: auto;

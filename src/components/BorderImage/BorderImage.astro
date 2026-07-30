@@ -16,16 +16,17 @@ const { src } = Astro.props;
     width: 100%;
     max-width: 375px;
     height: 375px;
-    border-radius: 20px;
-    background-color: var(--secondary-color);
-    padding: 1rem;
+    border-radius: var(--radius-xl);
+    background-color: var(--color-panel);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-lg);
   }
 
   .border-image img {
-    height: auto;
+    height: 100%;
     width: 100%;
-    background-color: var(--primary-color);
-    border-radius: 20px;
+    background-color: var(--color-bg);
+    border-radius: 12px;
     overflow: hidden;
     object-fit: cover;
   }

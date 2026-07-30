@@ -1,6 +1,6 @@
 import HeroSection from "./HeroSection.astro";
 import BorderImage from "../BorderImage/BorderImage.astro";
-import meImage from "../../assets/me.jpg"
+import meImage from "../../assets/me.png"
 
 export default {
     title: 'Component/HeroSection',
