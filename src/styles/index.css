@@ -85,6 +85,38 @@ html {
   scroll-behavior: smooth;
 }
 
+/* The router repositions the page while a view transition runs, and smooth
+   scrolling turns that jump into a visible scroll of the whole document. */
+html[data-astro-transition] {
+  scroll-behavior: auto;
+}
+
+/* An article is tall enough that animating its group between two posts drags
+   the old one up the screen, which reads as the page scrolling to the top.
+   Pin the group to its final position and cross-fade in place instead. These
+   rules sit outside `@layer astro` so they win over the generated defaults. */
+::view-transition-group(blog-post) {
+  animation: none;
+}
+
+::view-transition-old(blog-post) {
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-new(blog-post) {
+  animation: view-transition-fade-in 0.3s var(--ease) both;
+}
+
+@keyframes view-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -206,6 +238,10 @@ pre.astro-code[data-language="text"] code {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* `*` doesn't reach the view transition pseudo-elements */
+  ::view-transition-new(blog-post) {
+    animation-duration: 0.01ms;
   }
 }
 

@@ -1,0 +1,102 @@
+---
+title: The Project That Never Ends - And Why That's Okay
+description: Sometimes the most valuable project you'll ever build is the one that keeps teaching you, long after you expected it to be finished.
+pubDate: July 31 2026
+updatedDate: July 31 2026
+coverImage: ./covers/the-project-that-never-ends.png
+---
+
+Every engineer has _that_ project. The one that follows you from laptop to laptop. The one you've rewritten far too many times. The one that teaches you more than any tutorial, conference talk, or online course ever could.
+
+Mine is an open-source presentation application inspired by ProPresenter.
+
+If you looked at my Github repositories, you'd probably think I couldn't make up my mind. Five (maybe six) major rewrites around this 'presenter', entire architectural decisions thrown away and rebuilt from scratch. From the outside, it probably looks like a project that never gets finished. But somewhere along the way I realized something. Maybe finishing it was never the point.
+
+## The Question That Started It All
+
+Years ago I contributed to an open-source project called Spectacle. It was my first real exposure to building software that spanned multiple windows, and I remember thinking how fascinating it was that a web application could solve a problem that traditionally belonged to native desktop software.
+
+That idea stuck with me.
+
+A few years later my local church introduced me to ProPresenter. If you've never used it, it's an incredibly capable presentation application. It manages multiple displays, live presentations, media, stage displays, announcements, timers and far more than I ever expected presentation software to do. But something else caught my attention.
+
+It felt... heavy.
+
+Windows occasionally lagged while resizing. Slide changes sometimes stuttered. Navigating the application didn't always feel as responsive as I expected. To be clear, this isn't criticism. ProPresenter solves an incredibly difficult problem, and it solves it well, but it triggered the question that starts so many engineering rabbit holes.
+
+**Why?**
+
+Not "Why is this software bad?"
+
+But instead **"What makes this problem so difficult?"** that single question eventually turned into the side project I've been carrying around for years.
+
+## Curiosity, Not Reinvention
+
+I wasn't trying to replace ProPresenter, I wasn't convinced I could build something better and I wasn't looking for an excuse to learn Rust or desktop development. I simply wanted to understand.
+
+On the surface the problem felt straightforward. "Display text and images across multiple screens."
+
+Of course, the more I dug into it, the more I realized that wasn't the problem at all.
+
+Synchronization
+Multiple displays
+Media playback
+Presentation state
+Window management
+Storage
+
+The rabbit hole just kept getting deeper.
+
+## Choosing the Tools
+
+Once I'd convinced myself the idea was worth exploring, I started looking at the technology. Electron was the obvious choice.  Flutter looked interesting. React Native Desktop existed. Then I found Tauri.
+
+At the time it was still relatively young, but something about it clicked. I already enjoyed building user interfaces in React, and I'd been slowly learning Rust on the side. Tauri felt like a chance to combine those worlds while keeping the application lightweight.
+
+The choice wasn't really about finding the "best" framework. It was about removing enough unknowns that I could focus on the problem I actually wanted to solve.
+
+## The First Version
+
+Version one wasn't about building presentation software. It was about proving an idea. Could multiple windows communicate reliably? Could one application coordinate presentation state across different displays? Could web technologies actually deliver the responsiveness I was looking for?
+
+Surprisingly... Yes.
+
+The architecture was intentionally simple. One main window acted as the orchestrator. Everything else was intentionally dumb. The presentation window, the preview window, and future windows simply reacted to events emitted by the orchestrator.  And each windows 'view' was just a route in the frontend.
+
+```text
+Main Window (Orchestrator)
+        │
+        ├────────▶ Presentation Window
+        │
+        ├────────▶ Preview Window
+        │
+        └────────▶ Future Windows...
+```
+
+It worked remarkably well and that was the exciting part. The less exciting realization came a few months later, the concept worked but the architecture didn't.
+
+## The Real Problem Wasn't the Framework
+
+Looking back, I don't think I abandoned the first version because I picked the wrong technology. I abandoned it because I hadn't yet learned how to manage complexity. The project started without TypeScript, that wasn't a problem when the application had twenty files but It became a problem when it had hundreds. Changing a function signature suddenly meant remembering where it was used. Changing a data structure meant hoping nothing else relied on it. Every feature required holding more and more of the application in my head at once. The cognitive load slowly became exhausting. TypeScript wouldn't have magically solved those problems, but it would have helped me understand the relationships inside the system much sooner.
+
+## Then State Management Started Fighting Me
+
+The next lesson came from state management. I had chosen a reducer-based architecture, and there's nothing inherently wrong with reducers. In fact, I still think they're a great pattern. The problem was that I hadn't designed my state with enough intention. Every new feature introduced another action, another payload, another reducer, another place a bug could hide. Adding features became slower, finding bugs became harder, and looking back, I don't blame the state management library. I blame the fact that I hadn't yet learned that state management isn't about deciding between Redux, Zustand, Context, or MobX. It's about designing a model that's still easy to understand six months later.
+
+## The Rewrite That Didn't Feel Like Failure
+
+Eventually I stopped working on the project.  Not because I lost interest, but because I had painted myself into a corner. A few years ago I would have considered that a failure. Now I see it differently. That rewrite taught me more than successfully shipping version one ever could have. It taught me:
+
+- how architectural decisions compound over time.
+- that maintainability matters long before a project becomes "large."
+- that reducing cognitive load is often more important than reducing lines of code.
+
+And most importantly, **It taught me that some projects aren't meant to be finished. Some projects exist to teach you how to build the next version.**
+
+## Where It Is Today
+
+Today I'm still in the process of rewriting it but Im not overwhelmed by the idea of picking up where I left off even if months go by without a single new commit. The architecture, and the state model are different. The technology has evolved. And more importantly I've evolved. Every rewrite reflects what I've learned since the previous one. That's why I don't think of this as a failed side project. I think of it as a long-running engineering journal. Every version captures how I thought about software at that point in my career. Maybe one day I'll call it "finished."
+
+But honestly, I hope I never stop finding reasons to make it better.
+
+[https://github.com/mwritter/os-presenter](https://github.com/mwritter/os-presenter)

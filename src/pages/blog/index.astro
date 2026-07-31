@@ -2,9 +2,11 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import BlogSummary from "../../components/BlogSummary/BlogSummary.astro";
-import { publishedPostFilter } from "../../content.config";
+import { mostRecentFirstSort, publishedPostFilter } from "../../content.config";
 
-const posts = await getCollection("blog", publishedPostFilter);
+const posts = (await getCollection("blog", publishedPostFilter)).sort(
+  mostRecentFirstSort,
+);
 ---
 
 <Layout

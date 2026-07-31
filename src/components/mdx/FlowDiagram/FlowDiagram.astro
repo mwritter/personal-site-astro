@@ -1,7 +1,6 @@
 ---
 interface Step {
   text: string;
-  /** Label shown next to the arrow leading to the next step */
   label?: string;
 }
 
@@ -53,6 +52,7 @@ const items = steps.map((step) =>
     border-radius: 8px;
     padding: 1.5rem;
     font-size: 0.875rem;
+    color: var(--foreground-color-light);
   }
 
   .step {

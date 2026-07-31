@@ -11,7 +11,7 @@ const { post } = Astro.props;
 const { title, description, pubDate, coverImage } = post.data;
 ---
 
-<div class="blog-summary" transition:animate="initial">
+<div class="blog-summary">
   <a href={`/blog/${post.id}`}>
     <div class="content">
       {

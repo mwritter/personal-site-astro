@@ -7,6 +7,8 @@ import { glob } from "astro/loaders";
 // 3. Import Zod
 import { z } from "astro/zod";
 
+type Post = CollectionEntry<"blog">;
+
 // 4. Define a `loader` and `schema` for each collection
 const blog = defineCollection({
   loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
@@ -36,5 +38,8 @@ const resume = defineCollection({
 // 5. Export a single `collections` object to register your collection(s)
 export const collections = { blog, resume };
 
-export const publishedPostFilter = (post: CollectionEntry<"blog">) =>
-  Boolean(post.data.pubDate);
+export const publishedPostFilter = (post: Post) => Boolean(post.data.pubDate);
+
+export const mostRecentFirstSort = (a: Post, b: Post) => {
+  return b.data.pubDate!.valueOf() - a.data.pubDate!.valueOf();
+};

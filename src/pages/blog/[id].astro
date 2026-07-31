@@ -8,13 +8,13 @@ import { publishedPostFilter } from "../../content.config";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", publishedPostFilter);
-  return posts.map((post) => ({
+  return posts.map((post, idx) => ({
     params: { id: post.id },
-    props: { post },
+    props: { posts, post, idx },
   }));
 }
 
-const { post } = Astro.props;
+const { posts, post, idx } = Astro.props;
 
 const { Content } = await render(post);
 ---
@@ -28,7 +28,14 @@ const { Content } = await render(post);
   updatedDate={post.data.updatedDate}
 >
   <BlogPostingJsonLd slot="head" post={post} />
-  <div class="blog-post" transition:animate="initial">
+  <a class="back" href="/blog">
+    <span>&lt;-</span> All posts
+  </a>
+  <div
+    class="blog-post"
+    transition:name="blog-post"
+    transition:animate="initial"
+  >
     {
       post.data.coverImage && (
         <Image
@@ -43,6 +50,22 @@ const { Content } = await render(post);
     <Prose>
       <Content />
     </Prose>
+    {
+      posts.length > 1 && (
+        <div class="bottom-nav-controls">
+          {idx > 0 && (
+            <a class="back" href={`/blog/${posts[idx - 1].id}`}>
+              <span>&lt;-</span> previous
+            </a>
+          )}
+          {idx < posts.length - 1 && (
+            <a class="next" href={`/blog/${posts[idx + 1].id}`}>
+              next <span>-&gt;</span>
+            </a>
+          )}
+        </div>
+      )
+    }
   </div>
 </Layout>
 
@@ -55,5 +78,39 @@ const { Content } = await render(post);
     width: 100%;
     height: auto;
     border-radius: 8px;
+  }
+
+  .bottom-nav-controls {
+    display: flex;
+    width: 100%;
+  }
+
+  .bottom-nav-controls .next {
+    margin-left: auto;
+  }
+
+  .back,
+  .next {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    transition: color 0.2s var(--ease);
+  }
+
+  .back:hover,
+  .next:hover {
+    color: var(--color-ink);
+  }
+
+  .back span,
+  .next span {
+    display: inline-block;
+    transition: transform 0.2s var(--ease);
+  }
+
+  .back:hover span {
+    transform: translateX(-3px);
+  }
+  .next:hover span {
+    transform: translateX(3px);
   }
 </style>

@@ -1,10 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 import BlogSummary from "../BlogSummary/BlogSummary.astro";
-import { publishedPostFilter } from "../../content.config";
+import { mostRecentFirstSort, publishedPostFilter } from "../../content.config";
 
 const posts = (await getCollection("blog", publishedPostFilter))
-  .sort((a, b) => b.data.pubDate!.valueOf() - a.data.pubDate!.valueOf())
+  .sort(mostRecentFirstSort)
   .slice(0, 3);
 ---
 
