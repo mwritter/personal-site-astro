@@ -18,9 +18,9 @@ const posts = (await getCollection("blog", publishedPostFilter)).sort(
     {
       posts.length > 0 ? (
         <ul>
-          {posts.map((post) => (
+          {posts.map((post, idx) => (
             <li>
-              <BlogSummary post={post} />
+              <BlogSummary priority={idx <= 3} post={post} />
             </li>
           ))}
         </ul>

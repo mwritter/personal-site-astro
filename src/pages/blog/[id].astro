@@ -39,6 +39,7 @@ const { Content } = await render(post);
     {
       post.data.coverImage && (
         <Image
+          priority
           class="cover"
           src={post.data.coverImage}
           alt=""

@@ -5,9 +5,11 @@ import type { CollectionEntry } from "astro:content";
 
 interface Props {
   post: CollectionEntry<"blog">;
+  /** Only the caller knows whether this card lands above the fold. */
+  priority?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, priority = false } = Astro.props;
 const { title, description, pubDate, coverImage } = post.data;
 ---
 
@@ -17,6 +19,7 @@ const { title, description, pubDate, coverImage } = post.data;
       {
         coverImage && (
           <Image
+            priority={priority}
             class="cover"
             src={coverImage}
             alt=""

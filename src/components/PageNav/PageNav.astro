@@ -24,7 +24,13 @@ const isActive = (href: string) =>
       aria-label="Home"
       aria-current={current === "/" ? "page" : undefined}
     >
-      <Image src={invaderImage} height="22" alt="" />
+      <Image
+        loading="eager"
+        src={invaderImage}
+        height="22"
+        alt=""
+        transition:persist
+      />
     </a>
 
     <div class="nav-links">
@@ -79,17 +85,14 @@ const isActive = (href: string) =>
       transform 0.2s var(--ease);
   }
 
-  .brand:hover {
+  .brand:hover,
+  .brand[aria-current="page"] {
     background-color: var(--color-surface-hover);
     transform: translateY(-1px);
   }
 
   .brand img {
     transition: transform 0.25s var(--ease);
-  }
-
-  .brand:hover img {
-    transform: translateY(-2px) rotate(-6deg);
   }
 
   .nav-links {
