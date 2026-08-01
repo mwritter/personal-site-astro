@@ -1,6 +1,5 @@
 ---
-import { Image } from "astro:assets";
-import invaderImage from "../../assets/invader.svg";
+import Invader from "../../assets/invader.svg";
 import ThemeToggle from "../ThemeToggle/ThemeToggle.astro";
 import PageNavIndicator from "./PageNavIndicator.astro";
 
@@ -24,13 +23,7 @@ const isActive = (href: string) =>
       aria-label="Home"
       aria-current={current === "/" ? "page" : undefined}
     >
-      <Image
-        loading="eager"
-        src={invaderImage}
-        height="22"
-        alt=""
-        transition:persist
-      />
+      <Invader width={30} height={22} aria-hidden="true" />
     </a>
 
     <div class="nav-links">
@@ -91,7 +84,8 @@ const isActive = (href: string) =>
     transform: translateY(-1px);
   }
 
-  .brand img {
+  .brand svg {
+    display: block;
     transition: transform 0.25s var(--ease);
   }
 
